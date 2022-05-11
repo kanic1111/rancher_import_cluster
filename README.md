@@ -10,7 +10,7 @@ sudo docker logs  rancher  2>&1 | grep "Bootstrap Password:" # get the random ge
 ```
 
 ### 設定admin密碼與取得金鑰
-(要有圖片)
+
 ![](https://i.imgur.com/69z1mDz.png)
 **這邊打上 docker log 顯示的預設密碼**
 ![](https://i.imgur.com/nj1zFoG.png)
