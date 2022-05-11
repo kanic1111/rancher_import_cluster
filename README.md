@@ -1,4 +1,4 @@
-# rancher install (5/9)
+# rancher install 
 
 #### install.sh
 
