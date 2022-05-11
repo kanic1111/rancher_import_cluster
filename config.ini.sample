@@ -1,0 +1,9 @@
+[rancher]
+token=Bearer token:token key # token for rancher api service 
+server-ip=127.0.0.1 #rancher-server ip
+[cluster]
+cluster-number=1 #numbers of import cluster
+cluster1-name=sample # cluster name shows on rancher
+[remote]
+node1-user=sample-kanic #username for remote script 
+node1-ip=127.0.0.1 # cluster serverip for remote script 
