@@ -1,1 +1,0 @@
-ssh $(awk -F "=" '/node1-user/ {print $2}' config.ini)@$(awk -F "=" '/node1-ip/ {print $2}' config.ini) curl --insecure -sfL https://10.0.0.43:3001/v3/import/5ghm4qrfwmjrwbbgqggdjhrghq28mjbfvw25zmtn5kht8zbsx74q7r_c-9c95j.yaml | kubectl apply -f -
