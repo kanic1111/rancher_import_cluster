@@ -129,5 +129,5 @@ dmypy.json
 .pyre/
 
 # auto generated bash file 
-*import_cluster.sh
-*config.ini
+.import_cluster.sh
+.config.ini
