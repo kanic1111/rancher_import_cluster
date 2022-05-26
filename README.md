@@ -76,3 +76,71 @@ with open('import_cluster.sh', 'w') as f:
     f.write("ssh $(awk -F \"=\" '/node1-user/ {print $2}' config.ini)@$(awk -F \"=\" '/node1-ip/ {print $2}' config.ini) "+import_command) # write remote import cluster script 
 
 ```
+
+## 5/25新增
+
+**import-cluster.py**
+```python=
+import requests
+import json
+import configparser, time
+
+config1 = configparser.ConfigParser()
+config1.read('config.ini') #load config
+
+headers = {"Authorization": config1['rancher']['token']}
+
+rancher_ip = config1['rancher']['server-ip']
+cluster_id = config1['rancher']['cluster-id']
+config = {
+    "name":config1['cluster']['cluster1-name']
+}
+cluster_state = ''
+server_url = f'https://{rancher_ip}/v3/clusters/{cluster_id}' 
+try:
+    response=requests.get(server_url,json=config, headers=headers,verify=False) # get cluster info
+    import_data=json.loads(response.text)
+    print(response.status_code)
+    cluster_state=import_data["state"] # cluster get state
+    while(cluster_state !='active' ): # check if the cluster is active
+        response=requests.get(server_url,json=config, headers=headers,verify=False)
+        import_data=json.loads(response.text)
+        cluster_state=import_data["state"]
+        print(import_data["state"])
+        print(response.status_code)
+        time.sleep(5)
+except:
+    print(response.text)
+    print(response.status_code)
+```
+**app-install.sh**
+```bash=
+# install helm
+curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+chmod 700 get_helm.sh
+./get_helm.sh
+# add longhorn repository
+helm repo add longhorn https://charts.longhorn.io
+helm repo update
+# install rancher 
+kubectl create namespace longhorn-system
+helm install longhorn longhorn/longhorn --namespace longhorn-system
+kubectl -n longhorn-system get pod
+# install nginx controller
+helm repo add nginx-stable https://helm.nginx.com/stable
+helm repo update 
+helm install my-release nginx-stable/nginx-ingress
+# add harbor repository 
+helm repo add harbor https://helm.goharbor.io
+# install Harbor (default using ingress )
+helm install my-harbor harbor/harbor 
+
+# change service to NodePort
+# helm repo add harbor https://helm.goharbor.io
+# helm fetch harbor/harbor --untar
+# cd harbor
+# sed -i 's/  type: ingress/  type: NodePort/g' values.yaml
+# sed -i 's/      commonName: ""/      commonName: "core.harbor.domain"/g' values.yaml
+# kubectl create ns harbor
+# helm install harbor . -n harbor
+```
