@@ -15,11 +15,13 @@ helm repo update
 helm install my-release nginx-stable/nginx-ingress
 # add harbor repository 
 helm repo add harbor https://helm.goharbor.io
-# install Harbor default using ingress 
+# install Harbor (default using ingress )
 helm install my-harbor harbor/harbor 
 
 # change service to NodePort
-workload.user.cattle.io/workloadselector apps.deployment-harbor-harbor-nginx
+# helm repo add harbor https://helm.goharbor.io
+# helm fetch harbor/harbor --untar
+# cd harbor
 # sed -i 's/  type: ingress/  type: NodePort/g' values.yaml
 # sed -i 's/      commonName: ""/      commonName: "core.harbor.domain"/g' values.yaml
 # kubectl create ns harbor
