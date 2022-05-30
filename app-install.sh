@@ -6,6 +6,7 @@ chmod 700 get_helm.sh
 helm repo add longhorn https://charts.longhorn.io
 helm repo update
 # install rancher 
+sudo apt -y install open-iscsi 
 kubectl create namespace longhorn-system
 helm install longhorn longhorn/longhorn --namespace longhorn-system
 kubectl -n longhorn-system get pod
