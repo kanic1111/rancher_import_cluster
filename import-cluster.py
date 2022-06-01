@@ -27,7 +27,7 @@ try:
     import_data=json.loads(response.text)
     import_command=import_data["data"][0]['insecureCommand']
     with open('import_cluster.sh', 'w') as f:
-        f.write("ssh $(awk -F \"=\" '/node1-user/ {print $2}' config.ini)@$(awk -F \"=\" '/node1-ip/ {print $2}' config.ini) "+import_command) # write remote import cluster script 
+        f.write("ssh $node_user@$node_ip" + "\"" + import_command + "\"") # write remote import cluster script 
 except:
     print(response.text)
     print(response.status_code)
